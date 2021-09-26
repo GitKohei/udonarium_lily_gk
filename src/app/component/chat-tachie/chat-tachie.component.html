@@ -1,0 +1,28 @@
+<div>
+  <form>
+  <div id="tachie-component_" #tachieArea [ngStyle]="{'height': tachieAreaHeight + 'px' }">
+    <chat-tachie-img [chatTabidentifier]="chatTabidentifier"  [isTilteTop]="0"
+    [dispByMouse]="true" ></chat-tachie-img>
+    
+  </div>
+    <div>
+      立ち絵表示:
+      <ng-container *ngIf="chatTab">
+        <input type="checkbox" value="tachieDispFlag"  [(ngModel)]="chatTab.tachieDispFlag" name="tachieDispFlag">
+      </ng-container>
+      <ng-container *ngIf="!chatTab">
+        <input type="checkbox">
+      </ng-container>
+　　　/サイズ:
+      <input [(ngModel)]="chatTabList.tachieHeightValue" type="number" min="{{chatTabList.minTachieSize}}" max="{{chatTabList.maxTachieSize}}" name="tachieHeight" (change)="chkHeight($event.target.value)"/>
+      チャット簡易表示:
+      <ng-container *ngIf="chatTab">
+        <input type="checkbox" value="chatSimpleDispFlag"  
+        [(ngModel)]="chatTab.chatSimpleDispFlag" name="chatSimpleDispFlag" 
+        (click)="changeSimpleDisp()">
+      </ng-container>
+      <button class="message-setting small-font" (click)="shoeMessageSetting();"><i class="material-icons small-font">settings</i>詳細</button>
+      
+    </div>
+  </form>
+</div>

@@ -1,0 +1,25 @@
+<div [@flyInOut]="'in'" [ngClass]="{'pointer-events-none': isPointerDragging}" class="draggable-panel"
+  [style.left.px]="left" [style.top.px]="top" [style.width.px]="width" [style.height.px]="height"
+  [resizable.disable]="isMinimized || isFullScreen"
+  [draggable.stack]="'.draggable-panel'" appDraggable appResizable #draggablePanel
+  (mouseenter)="showTachie(true)" (mouseleave)="showTachie(false)"
+  >
+<!--  style = "{{backGroundSetting(0)}}"-->
+
+  <div class="title" #titleBar>
+    <div class="title-button">
+      <button [disabled]="isFullScreen" (click)="toggleMinimize()"><i class="material-icons" style="font-size: 14px;">minimize</i></button>
+      <button [disabled]="isMinimized" (click)="toggleFullScreen()"><i class="material-icons" style="font-size: 14px;">fullscreen</i></button>
+      <button (click)="close()"><i class="material-icons" style="font-size: 14px;">close</i></button>
+    </div>
+    {{panelService.title}}
+  </div>
+  <ng-container *ngIf="panelService.chatTab" >
+    <chat-tachie-img  [chatTabidentifier]="panelService.chatTab.identifier" [isTilteTop]="1"
+     [dispByMouse]="tachieDispByMouse" ></chat-tachie-img>
+  </ng-container>
+    <div class="scrollable-panel" [ngStyle]="{ 'padding': padding_ }" #scrollablePanel  >
+      <ng-content></ng-content>
+      <div #content></div>
+    </div>
+</div>
