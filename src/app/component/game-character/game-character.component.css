@@ -295,6 +295,63 @@
     transform: translateX(2px) translateY(1px) translateZ(0px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
 }
 
+.lazy-move {
+    position: absolute;
+}
+
+.ping-circle {
+    top: 0;
+    display: inline-block;
+    backface-visibility: hidden;
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    text-align: center;
+    border-radius: 50%;
+    border: dashed 3px skyblue;
+}
+
+.circle-text {
+    position: absolute;
+    width: 0px;
+    /* 可変直径 */
+    height: 0px;
+    /* 可変直径 */
+    font-size: 30px;
+    text-align: center;
+    margin: 0;
+    transform: rotate(-80deg);
+    /* 円の回転 */
+}
+
+.circle-text span {
+    position: absolute;
+    display: inline-block;
+    width: 0px;
+    height: 0px;
+    /* 可変半径 */
+    transform-origin: center bottom;
+    /* 回転の基準点 */
+    color: rgb(212, 212, 212);
+    text-shadow: 3px 3px 0 #222, -3px -3px 0 #222, -3px 3px 0 #222, 3px -3px 0 #222, 0px 3px 0 #222, 0 -3px 0 #222, -3px 0 0 #222, 3px 0 0 #222;
+}
+
+.circle-text span:nth-child(1) {
+    transform: rotate(45deg);
+}
+
+.circle-text span:nth-child(2) {
+    transform: rotate(135deg);
+}
+
+.circle-text span:nth-child(3) {
+    transform: rotate(225deg);
+}
+
+.circle-text span:nth-child(4) {
+    transform: rotate(315deg);
+}
+
 @keyframes focused {
     0% {
         box-shadow: none;

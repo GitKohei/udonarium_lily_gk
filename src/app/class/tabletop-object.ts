@@ -18,6 +18,11 @@ export class TabletopObject extends ObjectNode {
     x: 0,
     y: 0
   };
+  @SyncVar() concentricLocation: TabletopLocation = {
+    name: 'table',
+    x: 0,
+    y: 0
+  };
 
   @SyncVar() posZ: number = 0;
 
@@ -38,7 +43,7 @@ export class TabletopObject extends ObjectNode {
   get commonDataElement(): DataElement { return this.getElement('common'); }
   get detailDataElement(): DataElement { return this.getElement('detail'); }
 
-  get buffDataElement(): DataElement { return this.getElement('buff'); }//ƒŠƒŠƒB‚É‚Äƒoƒt‹@”\—p‚Ì’Ç‰Á
+  get buffDataElement(): DataElement { return this.getElement('buff'); }//ï¿½ï¿½ï¿½ï¿½ï¿½Bï¿½É‚Äƒoï¿½tï¿½@ï¿½\ï¿½pï¿½Ì’Ç‰ï¿½
 
 
   addBuffDataElement(){ 
