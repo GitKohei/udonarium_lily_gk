@@ -23,6 +23,7 @@
 ![lilygk_sample](https://user-images.githubusercontent.com/サンプルイメージもまだないよ/)
 
 分家から引用
+https://github.com/entyu/udonarium_lily
 > 
 > ---------以下本家からの一部抜粋です---------------
 > 
@@ -33,7 +34,7 @@
 > 以下のファイルをダウンロードして解凍し、Webサーバに配置してください。  
 > 
 
-https://まだリリースビルドはないよ/
+https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.5.1/udonarium_lily_gk.zip/
 
 > 
 > #### SkyWay
