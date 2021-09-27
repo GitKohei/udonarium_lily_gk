@@ -156,7 +156,11 @@ export class OverviewPanelComponent implements AfterViewInit, OnDestroy {
     this.isOpenImageView = isOpen;
   }
 
+  hideInformation: boolean = false;
   private getInventoryTags(gameObject: TabletopObject): DataElement[] {
+    if ( gameObject instanceof GameCharacter ) {
+      this.hideInformation = gameObject.hideInformation;
+    }
     return this.inventoryService.tableInventory.dataElementMap.get(gameObject.identifier);
   }
   
@@ -225,7 +229,7 @@ export class OverviewPanelComponent implements AfterViewInit, OnDestroy {
   }
   
   changeChk(){
-    //Àˆ—‚È‚µ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½
   }
 
   textFocus( dataElmIdentifier ){
