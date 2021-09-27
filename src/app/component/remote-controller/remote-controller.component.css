@@ -509,6 +509,12 @@ input[type='range']::-ms-tooltip {
   margin-top: 0;
 }
 
+.controller-left {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .controller-right {
   flex: 1;
   height: 100%;
