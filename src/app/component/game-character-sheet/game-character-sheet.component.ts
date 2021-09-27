@@ -128,10 +128,21 @@ export class GameCharacterSheetComponent implements OnInit, OnDestroy, AfterView
     if (!this.tabletopObject || this.isSaveing) return;
     this.isSaveing = true;
     this.progresPercent = 0;
-    let element = this.tabletopObject.commonDataElement.getFirstElementByName('name');
-    let objectName: string = element ? <string>element.value : '';
+    let element = this.tabletopObject.detailDataElement.getFirstElementByName('FileName');
+    let objectName: string = '';
+    if(element) {
+      objectName += element ? <string>element.value : '';
+    } else {
+      objectName += 'xml_';
+      let nameProtocol: string[] = ['種族','レベル','ロール','生息地','name'];
+      nameProtocol.forEach(protocol => {
+        let element = this.tabletopObject.commonDataElement.getFirstElementByName(protocol);
+        if(!element) element = this.tabletopObject.detailDataElement.getFirstElementByName(protocol);
+        objectName += element ? <string>element.value+'_' : '';
+      });
+    }
 
-    await this.saveDataService.saveGameObjectAsync(this.tabletopObject, 'xml_' + objectName, percent => {
+    await this.saveDataService.saveGameObjectAsync(this.tabletopObject, objectName, percent => {
       this.progresPercent = percent;
     });
 
