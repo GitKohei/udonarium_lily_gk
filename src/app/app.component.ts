@@ -19,6 +19,8 @@ import { DiceBot } from '@udonarium/dice-bot';
 import { Jukebox } from '@udonarium/Jukebox';
 import { PeerCursor } from '@udonarium/peer-cursor';
 import { PresetSound, SoundEffect } from '@udonarium/sound-effect';
+import { TabletopObject } from '@udonarium/tabletop-object';
+import { GameCharacter } from '@udonarium/game-character';
 
 import { CutIn } from '@udonarium/cut-in';
 import { CutInLauncher } from '@udonarium/cut-in-launcher';
@@ -344,6 +346,43 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     let files = input.files;
     if (files.length) FileArchiver.instance.load(files);
     input.value = '';
+  }
+
+  isSaveingCharas: boolean = false;
+  // GK0.1.0 テーブル上の全キャラを個別にzipで保存するやつ
+  async saveCharas() {
+    if (this.isSaveingCharas) return;
+    this.isSaveingCharas = true;
+    this.progresPercent = 0;
+
+    let list = ObjectStore.instance.getObjects(GameCharacter);
+    list.forEach(async (obj) => {
+      if(obj.location.name != 'graveyard') {
+
+        let element = obj.detailDataElement.getFirstElementByName('FileName');
+        let objectName: string = '';
+
+        if(element) {
+          objectName += element ? <string>element.value : '';
+        } else {
+          objectName += 'xml_';
+          let nameProtocol: string[] = ['種族','レベル','ロール','生息地','name'];
+          nameProtocol.forEach(protocol => {
+            let element = obj.commonDataElement.getFirstElementByName(protocol);
+            if(!element) element = obj.detailDataElement.getFirstElementByName(protocol);
+            objectName += element ? <string>element.value+'_' : '';
+          });
+        }
+        await this.saveDataService.saveGameObjectAsync(obj, objectName, percent => {
+          this.progresPercent = percent;
+        });
+      }
+    });
+
+    setTimeout(() => {
+      this.isSaveingCharas = false;
+      this.progresPercent = 0;
+    }, 500);
   }
 
   private lazyNgZoneUpdate(isImmediate: boolean) {
