@@ -27,10 +27,10 @@ import { PointerDeviceService } from 'service/pointer-device.service';
 import { GameDataElementBuffComponent } from 'component/game-data-element-buff/game-data-element-buff.component';
 import { GameCharacterBuffViewComponent } from 'component/game-character-buff-view/game-character-buff-view.component';
 
-class RemoteControllerSelect {
-    name: string;
-    nowOrMax: string;
-    dispName: string;
+class RemotControllerSelect {
+  identifier: string;
+  type: string;
+  name: string;
 }
 
 @Component({
@@ -45,13 +45,13 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
 
   private _gameSystem: GameSystemClass;
 
-  get gameType(): string { return this._gameSystem == null ? '' : this._gameSystem.ID; }
+  get gameType(): string { return this._gameSystem == null ? '' : this._gameSystem.ID };
   set gameType(gameType: string) {
     DiceBot.loadGameSystemAsync(gameType).then((gameSystem) => {
       this._gameSystem = gameSystem;
-      if (this.character.remoteController) { this.character.remoteController.dicebot = gameSystem.ID; }
+      if (this.character.remoteController) this.character.remoteController.dicebot = gameSystem.ID;
     });
-  }
+  };
 
   get sendFrom(): string { return this.character.identifier; }
   set sendFrom(sendFrom: string) {
@@ -75,7 +75,7 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
 
   ) {
     this.initTimestamp = Date.now();
-    console.log('this.initTimestamp ' + this.initTimestamp);
+    console.log('constructor this.initTimestamp ' + this.initTimestamp);
   }
 
   get sortTag(): string { return this.inventoryService.sortTag; }
@@ -97,29 +97,36 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
 
   private _gameType = '';
   private initTimestamp = 0;
-  text = '';
 
   public buffAreaIsHide = false;
   public controllerAreaIsHide = false;
 
   chatTabidentifier = '';
-  remoteNumber = 0;
 
-  recoveryLimitFlag = false;
-  recoveryLimitFlagMin = false;
+  remoteNumber = 0;
+  numOfBlockingTimes = 0;
+
+  recoveryLimitFlag = true;
+  get includeBlockFlag(): boolean { return this.numOfBlockingTimes != 0; }
+  instantShowFlag = true;
 
   disptimer = null;
+
   selectCharacter = null;
 
-  remoteControllerSelect: RemoteControllerSelect = {
-    name : '',
-    nowOrMax : '',
-    dispName : ''
+  remoteControllerSelect: RemotControllerSelect = {
+    identifier: '',
+    type: '',
+    name: ''
   };
-  remoteControllerRadio = '';
+  remotControllerRadio = '';
 
-  remoteControlleridentifier: string[] = ['test01', 'test02'];
-  inputText = '';
+  remotControlleridentifier: string[] = ['test01', 'test02'];
+  testTag = '0001';
+
+  _text = '';
+  sendTo = '';
+
   isEdit = false;
   editPalette = '';
 
@@ -127,43 +134,53 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
 
   charList: string[] = [];
 
+
   inventoryTypes: string[] = ['table', 'common', 'graveyard'];
   selectTab = 'table';
   selectedIdentifier = '';
 
-  hideChkBoxEvent( eventValue: boolean) {
+  hideChkBoxEvent(eventValue: boolean) {
     this.buffAreaIsHide = eventValue;
   }
-  controllerHideChkChange( eventValue: boolean ){
+  controllerHideChkChange(eventValue: boolean) {
     this.controllerAreaIsHide = eventValue;
   }
-  recoveryLimitFlagChange( value ){
-    // 現状特に処理なし
+  recoveryLimitFlagChange(value) {
+    // 状態を見て処理分けしているので状態変更時は特に処理なし
+  }
+  includeBlockFlagChange(value) {
+    // same.
+  }
+  instantShowFlagChange(value) {
+    // same.
   }
 
 
-  reverseValue(){
-    this.remoteNumber = -this.remoteNumber;
+  reverseValue() {
+    this.remoteNumber = -1 * this.remoteNumber;
   }
 
-  remoteSelect( name: string , nowOrMax: string , dispName: string ){
+
+  remoteSelect(identifier: string, type: string, name: string) {
+    this.remoteControllerSelect.identifier = identifier;
+    this.remoteControllerSelect.type = type;
     this.remoteControllerSelect.name = name;
-    this.remoteControllerSelect.nowOrMax = nowOrMax;
-    this.remoteControllerSelect.dispName = dispName;
+    console.log(this.remoteControllerSelect);
   }
 
   charListChange(charName: string, checked: boolean) {
 
     if (checked) {
-       if (this.charList.indexOf(charName) < 0) {
-          this.charList.push(charName);
-       }
+      if (this.charList.indexOf(charName) < 0) {
+        this.charList.push(charName);
+      }
     } else {
-       if (this.charList.indexOf(charName) > -1) {
-         this.charList.splice(this.charList.indexOf(charName), 1);
-       }
+      if (this.charList.indexOf(charName) > -1) {
+        this.charList.splice(this.charList.indexOf(charName), 1);
+      }
     }
   }
+
 
   ngOnInit() {
     Promise.resolve().then(() => this.updatePanelTitle());
@@ -202,7 +219,10 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
 
     this.disptimer = setInterval(() => {
       this.changeDetector.detectChanges();
-    }, 200 );
+    }, 200);
+    //    console.log('ngOnInit this.initTimestamp ' + this.initTimestamp);
+    this.remoteSelect('HP', 'currentValue', 'HP現在値');
+
   }
 
 
@@ -228,19 +248,20 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
   }
 
   selectPalette(line: string) {
-    this.text = line;
+    this._text = line;
   }
 
   clickPalette(line: string) {
-    if (this.doubleClickTimer && this.text === line) {
+    if (this.doubleClickTimer && this._text === line) {
       clearTimeout(this.doubleClickTimer);
       this.doubleClickTimer = null;
       this.controllerInputComponent.sendChat(null);
     } else {
-      this.text = line;
+      this._text = line;
       this.doubleClickTimer = setTimeout(() => { this.doubleClickTimer = null; }, 400);
     }
   }
+
 
   resetPaletteSelect() {
     if (!this.chatPaletteElementRef.nativeElement) { return; }
@@ -288,13 +309,13 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
   getGameObjects(inventoryType: string): TabletopObject[] {
     switch (inventoryType) {
       case 'table':
-      const tableCharacterList_dest = [] ;
-      const tableCharacterList_scr = this.inventoryService.tableInventory.tabletopObjects;
-      for (const character of tableCharacterList_scr) {
-        const character_: GameCharacter = character as GameCharacter;
-        if ( !character_.hideInventory ) { tableCharacterList_dest.push( character as TabletopObject ); }
-      }
-      return tableCharacterList_dest;
+        const tableCharacterList_dest = [];
+        const tableCharacterList_scr = this.inventoryService.tableInventory.tabletopObjects;
+        for (const character of tableCharacterList_scr) {
+          const character_: GameCharacter = character as GameCharacter;
+          if (!character_.hideInventory) { tableCharacterList_dest.push(character as TabletopObject); }
+        }
+        return tableCharacterList_dest;
     }
   }
 
@@ -312,16 +333,16 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
     this.selectCharacter = gameObject;
   }
 
-  getTargetCharacters( checkedOnly: boolean ): GameCharacter[]{
+  getTargetCharacters(checkedOnly: boolean): GameCharacter[] {
     const gameCharacters = new Array();
     const objectList = this.getGameObjects(this.selectTab);
-    for (const object of objectList){
+    for (const object of objectList) {
       if (object instanceof GameCharacter) {
-        if ( object.hideInventory ) { continue; } // 非表示対象の除外のため
+        if (object.hideInventory) { continue; } // 非表示対象の除外のため
 
         const box = document.getElementById(object.identifier + '_' + this.initTimestamp) as HTMLInputElement;
-        if ( box ){
-          if ( box.checked || (!checkedOnly) ){
+        if (box) {
+          if (box.checked || (!checkedOnly)) {
             gameCharacters.push(object);
           }
         }
@@ -330,147 +351,292 @@ export class RemoteControllerComponent implements OnInit, OnDestroy {
     return gameCharacters;
   }
 
-  remoteDecBuffRound( checkedOnly: boolean ){
-    let text = '';
-    const gameCharacters = this.getTargetCharacters( checkedOnly );
-    if ( gameCharacters.length <= 0 ) { return; }
-    if ( ! this.chatTab) {  return; }
+  remotBuffRoundDo(gameCharacters: GameCharacter[]) {
+    if (gameCharacters.length <= 0) { return; }
 
-    const mess = '';
-    if ( gameCharacters.length > 0){
-      for (const object of gameCharacters){
-        object.decreaseBuffRound();
-        text = text + '[' + object.name + ']';
+    for (const character of gameCharacters) {
+
+      if (character.buffDataElement.children) {
+        for (const dataElm of character.buffDataElement.children) {
+          for (const data of dataElm.children) {
+            let oldNumS = '';
+            let sum: number;
+
+            oldNumS = (data.value as string);
+            sum = parseInt(oldNumS);
+            sum = sum - 1;
+            data.value = sum;
+          }
+        }
       }
-      const mess = 'バフのRを減少 ' + text;
-      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, '', this.controllerInputComponent.tachieNum);
     }
   }
 
-  decBuffRoundSelect(){
-    this.remoteDecBuffRound( true );
-  }
-
-  decBuffRoundAll(){
-    this.remoteDecBuffRound( false );
-  }
-
-  remoteBuffDeleteZeroRound( checkedOnly: boolean ){
+  remotBuffRound(checkedOnly: boolean) {
     let text = '';
-    const gameCharacters = this.getTargetCharacters( checkedOnly );
+    const gameCharacters = this.getTargetCharacters(checkedOnly);
+    if (gameCharacters.length <= 0) { return; }
+    if (!this.chatTab) { return; }
+
     const mess = '';
-    if ( gameCharacters.length > 0){
-      for (const object of gameCharacters){
-        object.deleteZeroRoundBuff();
+    if (gameCharacters.length > 0) {
+      for (const object of gameCharacters) {
         text = text + '[' + object.name + ']';
       }
-      const mess = '0R以下のバフを消去 ' + text;
-      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, '', this.controllerInputComponent.tachieNum);
+      this.remotBuffRoundDo(gameCharacters);
+      let mess = 'バフのRを減少 ' + text;
+      //      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, this.sendTo ,this.controllerInputComponent.tachieNum);
     }
   }
 
-  deleteZeroRoundBuffSelect(){
-    this.remoteBuffDeleteZeroRound( true );
+  remotBuffRoundSelect() {
+    this.remotBuffRound(true);
   }
 
-  deleteZeroRoundBuffAll(){
-    this.remoteBuffDeleteZeroRound( false );
+  remotBuffRoundALL() {
+    this.remotBuffRound(false);
   }
-
-  remoteAddBuffRound(gameCharacters: GameCharacter[], name: string, info: string, round: number){
-    const text = '';
+  /*
+  remotBuffDeleteZeroRoundDo(gameCharacters: GameCharacter[]){
     if ( gameCharacters.length <= 0 ) { return; }
     for (const character of gameCharacters){
-      character.addBuffRound(name, info, round);
+
+      if (character.buffDataElement.children){
+        for (const dataElm of character.buffDataElement.children){
+          for (const data  of dataElm.children){
+            let oldNumS = '';
+            let num: number;
+
+            oldNumS = (data.value as string);
+            num = parseInt(oldNumS);
+            if ( num <= 0){
+              data.destroy();
+            }
+          }
+        }
+      }
+    }
+  }
+  */
+  remotBuffDeleteZeroRoundDo(gameCharacters: GameCharacter[]): string {
+    let retmess = '';
+    if (gameCharacters.length > 0) {
+      for (const character of gameCharacters) {
+        if (character.buffDataElement.children) {
+          for (const dataElm of character.buffDataElement.children) {
+            for (const data of dataElm.children) {
+              let oldNumS = '';
+              let num: number;
+
+              oldNumS = (data.value as string);
+              num = parseInt(oldNumS);
+              if (num <= 0) {
+                retmess += '\r\n[remove]' + character.name + ':' + data.getAttribute("name");
+                data.destroy();
+              }
+            }
+          }
+        }
+      }
+    }
+    return retmess;
+  }
+
+  private reactiveTimer: NodeJS.Timer;
+
+  remotBuffDeleteZeroRound(checkedOnly: boolean) {
+    let text = '';
+    const gameCharacters = this.getTargetCharacters(checkedOnly);
+
+    const mess = '';
+    if (gameCharacters.length > 0) {
+      for (const object of gameCharacters) {
+        text = text + '[' + object.name + ']';
+//        object.activable = false;
+      }
+      this.reactiveTimer = setTimeout(() => {
+        this.reactiveTimer = null;
+        const gChars = this.getTargetCharacters(false);
+        if (gChars.length > 0)
+          for (const obj of gChars){
+ //           obj.activable = (obj.location.name == "table");
+          }
+      }, 2020);
+      let mess = 'ラウンド進行:' + this.remotBuffDeleteZeroRoundDo(gameCharacters) + ' NextR'; // cutinをキック
+      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, this.sendTo, this.controllerInputComponent.tachieNum);
     }
   }
 
-  sendChat(value: { text: string, gameSystem: GameSystemClass, sendFrom: string, '': string , tachieNum: number , messColor: string }) {
+  remotBuffDeleteZeroRoundSelect() {
+    this.remotBuffDeleteZeroRound(true);
+  }
+  remotBuffDeleteZeroRoundALL() {
+    this.remotBuffDeleteZeroRound(false);
+  }
+  goBuffRoundALL() {
+    this.remotBuffRoundALL();
+    this.remotBuffDeleteZeroRoundALL();
+  }
+
+  remoteAddBuffRound(gameCharacters: GameCharacter[], name: string, subcom: string, round: number) {
+
+    const text = '';
+    if (gameCharacters.length <= 0) { return; }
+    for (const character of gameCharacters) {
+      if (character.buffDataElement.children) {
+        for (const dataElm of character.buffDataElement.children) {
+          const data = character.buffDataElement.getFirstElementByName(name);
+          if (data) {
+            data.value = round;
+            data.currentValue = subcom;
+          } else {
+            dataElm.appendChild(DataElement.create(name, round, { type: 'numberResource', currentValue: subcom },));
+          }
+
+        }
+      }
+    }
+  }
+
+  sendChat(value: { text: string, gameSystem: GameSystemClass, sendFrom: string, sendTo: string, tachieNum: number, messColor: string }) {
 
     let text = '';
-    const gameCharacters = this.getTargetCharacters( true );
+    const gameCharacters = this.getTargetCharacters(true);
 
-    const splittext: string[] =  value.text.split(/\s+/);
+    const splittext: string[] = value.text.split(/\s+/);
     let round = 3;
     let sub = '';
     let buffname = '';
     let bufftext = '';
 
-    if ( splittext.length == 0) {
+    if (splittext.length == 0) {
       return;
     }
-    if ( splittext[0] == '') {
+    if (splittext[0] == '') {
       return;
     }
 
     buffname = splittext[0];
     bufftext = splittext[0];
-    if ( splittext.length > 1){ sub = splittext[1]; bufftext = bufftext + '/' + splittext[1]; }
-    if ( splittext.length > 2){ round = parseInt(splittext[2]); bufftext = bufftext + '/' + round + 'R'; }
+    if (splittext.length > 1) { sub = splittext[1]; bufftext = bufftext + '/' + splittext[1]; }
+    if (splittext.length > 2) { round = parseInt(splittext[2]); bufftext = bufftext + '/' + round + 'R'; }
 
-    if ( gameCharacters.length > 0){
-      for (const object of gameCharacters){
+    if (gameCharacters.length > 0) {
+      for (const object of gameCharacters) {
         text = text + '[' + object.name + ']';
       }
       this.remoteAddBuffRound(gameCharacters, buffname, sub, round);
-      const mess = 'バフを付与 ' + bufftext + ' > ' + text;
-      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, '', value.tachieNum , value.messColor );
+      let mess = bufftext + '\r\n > ' + text;
+      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, this.sendTo, value.tachieNum, value.messColor);
       this.errorMessageBuff = '';
-    }else{
+    } else {
       this.errorMessageBuff = '対象が未選択です';
     }
   }
 
-  remoteChangeValue(){
+  remoteChangeValue() {
     let text = '';
-    const gameCharacters = this.getTargetCharacters( true );
-    if (this.remoteControllerSelect.name == ''){
+    const gameCharacters = this.getTargetCharacters(true);
+
+    if (this.remoteControllerSelect.identifier == '') {
       this.errorMessageController = '変更項目が未選択です';
       return;
     }
-    for (const object of gameCharacters){
-      const name = this.remoteControllerSelect.name;
-      const nowOrMax = this.remoteControllerSelect.nowOrMax;
-      const addValue = this.remoteNumber;
-      text += object.changeStatusValue(name, nowOrMax, addValue, this.recoveryLimitFlagMin, this.recoveryLimitFlag );
+
+    for (const object of gameCharacters) {
+
+      const data = object.detailDataElement.getFirstElementByName(this.remoteControllerSelect.identifier);
+      if (data) {
+        let oldNumS = '';
+        let newNum: number;
+        let sum: number;
+
+        if (this.remoteControllerSelect.type == 'value') {
+          oldNumS = (data.value as string);
+          sum = parseInt(oldNumS);
+          sum = sum + this.remoteNumber;
+          data.value = sum;
+          newNum = (data.value as number);
+        }
+
+        let maxRecoveryMess = '';
+        if (this.remoteControllerSelect.type == 'currentValue') {
+          let bt = object.detailDataElement.getFirstElementByName('防護点');
+          let b = object.detailDataElement.getFirstElementByName('防護');
+          let gb = object.detailDataElement.getFirstElementByName('概算防護');
+          let blockpoint: number = (bt) ? parseInt(bt.value as string) : (b) ? parseInt(b.value as string) : 0;
+          blockpoint += (gb) ? parseInt(gb.currentValue as string) : 0;
+          if (this.includeBlockFlag && data.name == 'HP' && blockpoint > 0 && this.remoteNumber < 0) {
+            //           for(const buff of object.buff)
+            //             blockpoint += (object.buff as number); // 一旦バフは考慮しない
+            oldNumS = (data.currentValue as string);
+            sum = parseInt(oldNumS);
+            sum = sum + this.remoteNumber + (((this.remoteNumber + blockpoint * this.numOfBlockingTimes) > 0) ? -this.remoteNumber : blockpoint * this.numOfBlockingTimes);
+            data.currentValue = sum;
+            maxRecoveryMess += ' :防-' + blockpoint.toString() + (this.numOfBlockingTimes > 0 ? ('x' + this.numOfBlockingTimes) : '');
+          } else {
+            oldNumS = (data.currentValue as string);
+            sum = parseInt(oldNumS);
+            sum = sum + this.remoteNumber;
+            data.currentValue = sum;
+          }
+          if (this.recoveryLimitFlag && data.currentValue >= data.value) {
+            maxRecoveryMess += '(max)';
+            data.currentValue = data.value;
+          }
+          if (data.currentValue < 1) {
+            maxRecoveryMess += '(気絶/死亡)'
+          }
+          newNum = (data.currentValue as number);
+        }
+        if (object.hideInformation) {
+          text = text + '[' + object.name + ' ?? > ??' + maxRecoveryMess + '] \r\n';
+        } else {
+          text = text + '[' + object.name + ' ' + oldNumS + ' > ' + newNum + maxRecoveryMess + '] \r\n';
+        }
+      }
     }
-    if ( text != '' ){
+
+    if (text != '') {
       let hugou = '+';
-      if ( this.remoteNumber < 0) { hugou = ''; }
-      const mess = '[' + this.remoteControllerSelect.dispName + ']変更[' + hugou + this.remoteNumber + ']＞' + text;
-      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, '', this.controllerInputComponent.tachieNum , this.controllerInputComponent.selectChatColor );
+      if (this.remoteNumber < 0) hugou = ''
+      let mess = '[' + this.remoteControllerSelect.name + ']変更[' + hugou + this.remoteNumber + ']＞\r\n' + text;
+      this.chatMessageService.sendMessage(this.chatTab, mess, this._gameSystem, this.sendFrom, this.sendTo, this.controllerInputComponent.tachieNum, this.controllerInputComponent.selectChatColor);
       this.errorMessageController = '';
-    }else{
+    } else {
       this.errorMessageController = '対象キャラクターが未選択です';
     }
   }
+
 
   trackByGameObject(index: number, gameObject: GameObject) {
     return gameObject ? gameObject.identifier : index;
   }
 
-  buffEdit( gameCharacter: GameCharacter){
+  buffEdit(gameCharacter: GameCharacter) {
     const coordinate = this.pointerDeviceService.pointers[0];
     const option: PanelOption = { left: coordinate.x, top: coordinate.y, width: 420, height: 300 };
     option.title = gameCharacter.name + 'のバフ編集';
     const component = this.panelService.open(GameCharacterBuffViewComponent, option);
     component.character = gameCharacter;
+
   }
 
-  allBoxCheck( value: { check: boolean }){
+  allBoxCheck(value: { check: boolean }) {
+
     const objectList = this.getGameObjects(this.selectTab);
-    for (const object of objectList){
+    for (const object of objectList) {
       if (object instanceof GameCharacter) {
         const box = document.getElementById(object.identifier + '_' + this.initTimestamp) as HTMLInputElement;
-        if ( box ){
+        if (box) {
           box.checked = value.check;
         }
       }
     }
   }
 
-  targetBlockClick(identifier){
-    console.log( 'identifier:' + identifier + ' initTimestamp:' + this.initTimestamp);
+  targetBlockClick(identifier) {
+    console.log('identifier:' + identifier + ' initTimestamp:' + this.initTimestamp);
     const box = document.getElementById(identifier + '_' + this.initTimestamp) as HTMLInputElement;
     box.checked = !box.checked;
   }

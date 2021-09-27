@@ -1,12 +1,29 @@
 <div class="component is-3d is-grab is-pointer-events-none" [style.width.px]="size * gridSize" [style.height.px]="size * gridSize" appMovable [movable.option]="movableOption" (movable.ondragstart)="onMove()" (movable.ondragend)="onMoved()" #root>
     <div class="component-content is-3d" [@bounceInOut]="'in'">
-        <div class="component-content is-3d is-pointer-events-auto" appRotable [rotable.option]="rotableOption" (rotable.ondragstart)="onMove()" (rotable.ondragend)="onMoved()">
-            <div *ngIf="!this.gameCharacter.hideInventory" class="pedestal-inner" [style]="{ 'border': 'solid 6px #FFCC80'}"></div>
-            <div *ngIf="this.gameCharacter.hideInventory" class="pedestal-inner" [style]="{ 'border': 'solid 6px #A0E0FF'}"></div>
-            <div class="pedestal-outer"></div>
-            <div class="pedestal-grab rotate-grab">
+        <div class="component-content is-3d is-pointer-events-auto" appRotable [rotable.option]="rotableOption" (rotable.ondragstart)="onMove()" (rotable.ondragend)="onMoved()" (auxclick)="onAuxClick($event)">
+            <!--足元の丸枠フチ色-->
+            <div *ngIf="this.gameCharacter.hideInformation" class="pedestal-inner" [ngStyle]="{
+              'border': 'solid 10px #ff69b4',
+              'border-radius': size * gridSize / 2 +'px'
+              }"></div>
+            <div *ngIf="!this.gameCharacter.hideInventory" class="pedestal-inner" [ngStyle]="{
+              'border': 'solid 6px #FFCC80',
+              'border-radius': size * gridSize / 2 +'px'
+              }"></div>
+            <div *ngIf="this.gameCharacter.hideInventory" class="pedestal-inner" [ngStyle]="{
+              'border': 'solid 6px #A0E0FF',
+              'border-radius': size * gridSize / 2 +'px'
+              }"></div>
+            <div class="pedestal-outer" [ngStyle]="{
+              'border-radius': size * gridSize / 2 +'px'
+              }"></div>
+            <div class="pedestal-grab rotate-grab" [ngStyle]="{
+              'border-radius': size * gridSize / 2 +'px'
+              }">
                 <!--床回転アイコン-->
-                <div class="pedestal-grab-border">
+                <div class="pedestal-grab-border" [ngStyle]="{
+                  'border-radius': size * gridSize / 2 +'px'
+                  }">
                     <div class="material-icons of-front">autorenew</div>
                     <div class="material-icons of-back">autorenew</div>
                 </div>
@@ -54,39 +71,41 @@
                         </ng-container>
                         <img class="image" *ngIf="0 < imageFile.url.length" [src]="imageFile.url | safe: 'resourceUrl'">
                         <!--HPMPバー表示-->
-                        <!-- HP -->
-                        <div *ngIf="hashp" class="is-nowrap is-3d" [ngStyle]="{'transform': 'translateX(-50%) translateX(' + size * gridSize / 2 +'px)'
+                        <ng-container *ngIf="!this.gameCharacter.hideInformation">
+                            <!-- HP -->
+                            <div *ngIf="hashp" class="is-nowrap is-3d" [ngStyle]="{'transform': 'translateX(-50%) translateX(' + size * gridSize / 2 +'px)'
                                ,'background-color': 'rgba(255,255,255, 0.6)' , 'color' : '#333' ,  'border': 'solid 1px #555' }">
-                            <div class="barline" [ngStyle]="
+                                <div class="barline" [ngStyle]="
                                   {'width': maxhp * size * gridSize / maxhp + 'px'
                                   ,'background-color': 'rgba(255,0,0,0.6)'
                                   ,'transform': 'translateY(-15px)' }"></div>
-                            <div class="barline" [ngStyle]="
+                                <div class="barline" [ngStyle]="
                                   {'width': currenthp * size * gridSize / maxhp + 'px'
                                   ,'background-color': '#4f0'
                                   ,'transform': 'translateY(-15px)' }"></div>
-                        </div>
-                        <!-- MP -->
-                        <div *ngIf="hasmp" [ngStyle]="{'transform': 'translateX(1px)'}">
-                            <div class="barline" [ngStyle]="
+                            </div>
+                            <!-- MP -->
+                            <div *ngIf="hasmp" [ngStyle]="{'transform': 'translateX(1px)'}">
+                                <div class="barline" [ngStyle]="
                                   {'width': maxmp * size * gridSize / maxmp + 'px'
                                   ,'height': 5 + 'px'
                                   ,'background-color': 'rgba(200,200,200,0.6)'
                                   ,'transform': 'translateY(-7px)' }"></div>
-                            <div class="barline" [ngStyle]="
+                                <div class="barline" [ngStyle]="
                                   {'width': currentmp * size * gridSize / maxmp + 'px'
                                   ,'height': 5 + 'px'
                                   ,'background-color': '#00f'
                                   ,'transform': 'translateY(-7px)' }"></div>
-                        </div>
-                        <div *ngIf="hashp">
-                            <!-- stripe -->
-                            <div class="barstripe" [ngStyle]="
+                            </div>
+                            <div *ngIf="hashp">
+                                <!-- stripe -->
+                                <div class="barstripe" [ngStyle]="
                                   {'width': maxhp * size * gridSize / maxhp + 'px'
                                   ,'height': 6 + 'px'
                                   ,'background-image': 'repeating-linear-gradient(90deg, rgba(255,255,255, 0.2) 0%, rgba(64,64,64, 0.5) ' + tenperhp + '%)'
                                   ,'transform': 'translateX(5px) translateY(-14.5px)' }"></div>
-                        </div>
+                            </div>
+                        </ng-container>
                         <!--回転部キャラ上-->
                         <div class="grab-group">
                             <div class="rotate-grab rotate-grab-icon of-top" [ngStyle]="{'transform': 'translateX(-50%) translateX(' + size * gridSize / 2 +'px)'}">
