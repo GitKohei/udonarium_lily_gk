@@ -7,6 +7,7 @@ import {
   ElementRef,
   HostListener,
   Input,
+  NgZone,
   OnDestroy,
   OnInit,
   ViewChild
@@ -19,6 +20,7 @@ import { GameCharacter } from '@udonarium/game-character';
 import { PresetSound, SoundEffect } from '@udonarium/sound-effect';
 import { ChatPaletteComponent } from 'component/chat-palette/chat-palette.component';
 import { GameCharacterSheetComponent } from 'component/game-character-sheet/game-character-sheet.component';
+import { InputHandler } from 'directive/input-handler';
 import { MovableOption } from 'directive/movable.directive';
 import { RotableOption } from 'directive/rotable.directive';
 import { ContextMenuSeparator, ContextMenuService } from 'service/context-menu.service';
@@ -112,10 +114,12 @@ export class GameCharacterComponent implements OnInit, OnDestroy, AfterViewInit 
   private unhighlightTimer: NodeJS.Timer;
 
   constructor(
+    private ngZone: NgZone,
     private contextMenuService: ContextMenuService,
     private panelService: PanelService,
     private changeDetector: ChangeDetectorRef,
     private pointerDeviceService: PointerDeviceService,
+    private tabletopService: TabletopService,
   ) { }
 
   ngOnInit() {
@@ -169,7 +173,11 @@ export class GameCharacterComponent implements OnInit, OnDestroy, AfterViewInit 
     };
   }
 
-  ngAfterViewInit() { }
+  ngAfterViewInit() { 
+    this.ngZone.runOutsideAngular(() => {
+      this.input = new InputHandler(this.rootElementRef.nativeElement);
+    });
+  }
 
   ngOnDestroy() {
     EventSystem.unregister(this);
@@ -228,6 +236,7 @@ export class GameCharacterComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   onMove() {
+    this.input.cancel();
     SoundEffect.play(PresetSound.piecePick);
   }
 
@@ -239,6 +248,34 @@ export class GameCharacterComponent implements OnInit, OnDestroy, AfterViewInit 
     if(e.which == 2)
       this.gameCharacter.hideInformation = !this.gameCharacter.hideInformation;
   }
+
+  private doubleClickPoint = { x: 0, y: 0 };
+  private input: InputHandler = null;
+
+  updateConcentricLocation() {
+    this.gameCharacter.concentricLocation.x = this.gameCharacter.location.x;
+    this.gameCharacter.concentricLocation.y = this.gameCharacter.location.y;
+  }
+
+  onDoubleClick(e) {
+    this.gameCharacter.showPing = !this.gameCharacter.showPing;
+    if(this.gameCharacter.showPing) {
+      this.updateConcentricLocation();
+      SoundEffect.play(PresetSound.showPing);
+    }
+  }
+
+  get currentTableScale(): number { return this.tabletopService.currentTable.scale; } // gameTableが持ってるscaleに依存して大きさを変更
+  get normalSpeed(): number {
+    let node = null;
+    node = this.gameCharacter.detailDataElement.getFirstElementByNames('飛行', '移動値', '移動', '通常移動', '移動力', '四足', '車輪');
+    if(node!=null)
+      if(node.value!=null)
+        if(!isNaN(Number(node.value)))
+          return Number(node.value);
+    return 3;
+  }
+
   private adjustMinBounds(value: number, min: number = 0): number {
     return value < min ? min : value;
   }

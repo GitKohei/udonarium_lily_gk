@@ -19,8 +19,16 @@ import { SaveDataService } from 'service/save-data.service';
   styleUrls: ['./game-table-setting.component.css']
 })
 export class GameTableSettingComponent implements OnInit, OnDestroy, AfterViewInit {
+  minScale: number = 0.5;
+  maxScale: number = 5.0;
+  get tableScale(): number { return this.selectedTable.scale; }
+  set tableScale(tableScale: number) {
+    if (this.isEditable) this.selectedTable.scale = tableScale;
+    // ここでテーブル上のgame-character.componentのscaleを更新する為にそいつらにのみUPDATE_GAME_OBJECT発行したいんだけど何か案ない？
+    // リモコンって他こんぽねに対してなんかEvent発行してなかったっけ　参考にしたい
+  }
   minSize: number = 1;
-  maxSize: number = 100;
+  maxSize: number = 200;
   get tableBackgroundImage(): ImageFile {
     if (!this.selectedTable) return ImageFile.Empty;
     let file = ImageStorage.instance.get(this.selectedTable.imageIdentifier);

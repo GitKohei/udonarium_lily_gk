@@ -1,6 +1,100 @@
+<!--移動値mの文字列4つ-->
+<div *ngIf="this.gameCharacter.showPing">
+    <div class="is-3d is-pointer-events-none lazy-move circle-text" [ngStyle]="
+      {'transform': 'translateX(' + gameCharacter.concentricLocation.x + 'px) translateY(' + gameCharacter.concentricLocation.y + 'px)',
+      'font-size': (normalSpeed*10) / currentTableScale + 'px'
+      }">
+        <div *ngIf="!this.gameCharacter.hideInformation" class="is-pointer-events-none" [ngStyle]="{
+            'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px) ' +
+            'translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+            'height': (normalSpeed * gridSize / currentTableScale)*2 + 'px',
+            'width': (normalSpeed * gridSize / currentTableScale)*2 + 'px'}">
+            <span [ngStyle]="{'height': (normalSpeed * gridSize / currentTableScale) + 'px'}">{{normalSpeed}}m</span>
+            <span [ngStyle]="{'height': (normalSpeed * gridSize / currentTableScale) + 'px'}">{{normalSpeed}}m</span>
+            <span [ngStyle]="{'height': (normalSpeed * gridSize / currentTableScale) + 'px'}">{{normalSpeed}}m</span>
+            <span [ngStyle]="{'height': (normalSpeed * gridSize / currentTableScale) + 'px'}">{{normalSpeed}}m</span>
+        </div>
+    </div>
+</div>
+<!--同心円エフェクト-->
+<div class="is-3d is-pointer-events-none lazy-move" [ngStyle]="
+  {'transform': 'translateX(' + gameCharacter.concentricLocation.x + 'px) translateY(' + gameCharacter.concentricLocation.y + 'px)' }">
+    <div *ngIf="this.gameCharacter.showPing" class="is-pointer-events-none" [ngStyle]="{'width': '0px', 'height': '0px'}">
+        <div *ngIf="!this.gameCharacter.hideInformation && currentTableScale<3" class="ping-gradient is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (normalSpeed * gridSize / currentTableScale) +'px',
+      'height': (normalSpeed * gridSize / currentTableScale)*2 + 'px',
+      'width': (normalSpeed * gridSize / currentTableScale)*2 + 'px',
+      'background-image': 'repeating-radial-gradient(' + 
+        'circle at 50% 50%,' + 
+        'transparent 0px,' + 
+        'transparent ' + (gridSize / currentTableScale-6) + 'px,' + 
+        'currentcolor ' + (gridSize / currentTableScale-4) + 'px,' + 
+        'currentcolor ' + (gridSize / currentTableScale) + 'px' + 
+      ')'
+    }"></div>
+        <div *ngIf="!this.gameCharacter.hideInventory" class="ping-circle is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (3 * gridSize / currentTableScale) +'px',
+      'height': (3 * gridSize / currentTableScale)*2 + 'px',
+      'width': (3 * gridSize / currentTableScale)*2 + 'px',
+      'border': 'dashed ' + (6 / currentTableScale) + 'px skyblue'
+    }"></div>
+        <div *ngIf="!this.gameCharacter.hideInventory" class="ping-circle is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (10 * gridSize / currentTableScale) +'px',
+      'height': (10 * gridSize / currentTableScale)*2 + 'px',
+      'width': (10 * gridSize / currentTableScale)*2 + 'px',
+      'border': 'dashed ' + (10 / currentTableScale) + 'px red'
+    }"></div>
+        <div *ngIf="!this.gameCharacter.hideInventory" class="ping-circle is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (20 * gridSize / currentTableScale) +'px',
+      'height': (20 * gridSize / currentTableScale)*2 + 'px',
+      'width': (20 * gridSize / currentTableScale)*2 + 'px',
+      'border': 'dashed ' + (10 / currentTableScale) + 'px red'
+    }"></div>
+        <div *ngIf="!this.gameCharacter.hideInventory" class="ping-circle is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (30 * gridSize / currentTableScale) +'px',
+      'height': (30 * gridSize / currentTableScale)*2 + 'px',
+      'width': (30 * gridSize / currentTableScale)*2 + 'px',
+      'border': 'dashed ' + (10 / currentTableScale) + 'px red'
+    }"></div>
+        <div *ngIf="!this.gameCharacter.hideInventory" class="ping-circle is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (40 * gridSize / currentTableScale) +'px',
+      'height': (40 * gridSize / currentTableScale)*2 + 'px',
+      'width': (40 * gridSize / currentTableScale)*2 + 'px',
+      'border': 'dashed ' + (10 / currentTableScale) + 'px red'
+    }"></div>
+        <div *ngIf="!this.gameCharacter.hideInventory" class="ping-circle is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (50 * gridSize / currentTableScale) +'px',
+      'height': (50 * gridSize / currentTableScale)*2 + 'px',
+      'width': (50 * gridSize / currentTableScale)*2 + 'px',
+      'border': 'dashed ' + (10 / currentTableScale) + 'px red'
+    }"></div>
+        <div *ngIf="!this.gameCharacter.hideInformation" class="ping-circle is-pointer-events-none" [ngStyle]="{
+      'transform': ' translateX(-50%) translateX(' + (size * gridSize / 2) +'px)'
+                  + ' translateY(-50%) translateY(' + (size * gridSize / 2) +'px)',
+      'border-radius': (normalSpeed * gridSize / currentTableScale) +'px',
+      'height': (normalSpeed * gridSize / currentTableScale)*2 + 'px',
+      'width': (normalSpeed * gridSize / currentTableScale)*2 + 'px',
+      'border': 'dashed ' + (10 / currentTableScale) + 'px black'
+    }"></div>
+    </div>
+</div>
 <div class="component is-3d is-grab is-pointer-events-none" [style.width.px]="size * gridSize" [style.height.px]="size * gridSize" appMovable [movable.option]="movableOption" (movable.ondragstart)="onMove()" (movable.ondragend)="onMoved()" #root>
     <div class="component-content is-3d" [@bounceInOut]="'in'">
-        <div class="component-content is-3d is-pointer-events-auto" appRotable [rotable.option]="rotableOption" (rotable.ondragstart)="onMove()" (rotable.ondragend)="onMoved()" (auxclick)="onAuxClick($event)">
+        <div class="component-content is-3d is-pointer-events-auto" appRotable [rotable.option]="rotableOption" (rotable.ondragstart)="onMove()" (rotable.ondragend)="onMoved()" (auxclick)="onAuxClick($event)" (dblclick)="onDoubleClick($event)">
             <!--足元の丸枠フチ色-->
             <div *ngIf="this.gameCharacter.hideInformation" class="pedestal-inner" [ngStyle]="{
               'border': 'solid 10px #ff69b4',

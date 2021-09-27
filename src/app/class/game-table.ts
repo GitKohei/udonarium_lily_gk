@@ -22,6 +22,7 @@ export class GameTable extends ObjectNode {
   @SyncVar() name: string = 'テーブル';
   @SyncVar() width: number = 20;
   @SyncVar() height: number = 20;
+  @SyncVar() scale: number = 1.0;
   @SyncVar() gridSize: number = 50;
   @SyncVar() imageIdentifier: string = 'imageIdentifier';
   @SyncVar() backgroundImageIdentifier: string = 'imageIdentifier';

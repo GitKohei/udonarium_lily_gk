@@ -60,6 +60,20 @@ export class DataElement extends ObjectNode {
     return null;
   }
 
+  getFirstElementByNames(...names: string[]): DataElement {
+    for (let child of this.children) {
+      if (child instanceof DataElement) {
+        for(let name of names)
+          if (child.getAttribute('name') === name) return child;
+        for(let name of names) {
+          let match = child.getFirstElementByName(name);
+          if (match) return match;
+        }
+      }
+    }
+    return null;
+  }
+  
   get myIdentifer(){
     let self: GameObject = <GameObject> this;
     return self.identifier;
