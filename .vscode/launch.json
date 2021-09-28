@@ -2,14 +2,19 @@
     // IntelliSense を使用して利用可能な属性を学べます。
     // 既存の属性の説明をホバーして表示します。
     // 詳細情報は次を確認してください: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.5.1",
+    "version": "0.2.0",
     "configurations": [
         {
-            "type": "pwa-chrome",
+            "type": "chrome",
             "request": "launch",
             "name": "Launch Chrome against localhost",
             "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}"
+            "webRoot": "${workspaceFolder}",
+            "breakOnLoad": true,
+            "secure": false,
+            "logLevel": "debug",
+            "sourceMap": true,
+            "debug.javascript.usePreview": false,
         }
     ]
 }
