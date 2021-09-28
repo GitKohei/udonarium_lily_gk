@@ -1,21 +1,21 @@
-<div>試聴音量：<input [(ngModel)]="auditionVolume" type="range" min="0" max="1" step="0.01" /></div>
-<div>BGM音量：<input [(ngModel)]="volume" type="range" min="0" max="1" step="0.01" /></div>
+<div><span class="volume">試聴音量：</span><input [(ngModel)]="auditionVolume" type="range" min="0" max="1" step="0.01" /></div>
+<div><span class="volume">BGM音量：</span><input [(ngModel)]="volume" type="range" min="0" max="1" step="0.01" /></div>
 
-<button *ngIf="1" (click)="openCutInList()" [disabled]="0" >カットイン編集</button>
+<button *ngIf="1" (click)="openCutInList()" [disabled]="0">カットイン編集</button>
 
 <hr/>
 <div>
-  <div *ngFor="let audio of audios" class="box">
-    <button *ngIf="audio !== auditionPlayer?.audio || auditionPlayer?.paused" (click)="play(audio)" [disabled]="!audio.isReady" >試聴/再生</button>
-    <button *ngIf="audio === auditionPlayer?.audio && !auditionPlayer?.paused" (click)="stop()" [disabled]="!audio.isReady" >試聴/停止</button>
-    <button *ngIf="audio !== jukebox?.audio" (click)="playBGM(audio)" [disabled]="!audio.isReady" >BGM/再生</button>
-    <button *ngIf="audio === jukebox?.audio" (click)="stopBGM(audio)" [disabled]="!audio.isReady" >BGM/停止</button>
-    <span *ngIf="audio === auditionPlayer?.audio && !auditionPlayer?.paused">【試聴中】</span>
-    <span *ngIf="audio === jukebox?.audio">【BGM】</span>
-    <span>{{audio.name}}</span><br>
+    <div *ngFor="let audio of audios" class="box">
+        <button *ngIf="audio !== auditionPlayer?.audio || auditionPlayer?.paused" (click)="play(audio)" [disabled]="!audio.isReady">試聴/再生</button>
+        <button *ngIf="audio === auditionPlayer?.audio && !auditionPlayer?.paused" (click)="stop()" [disabled]="!audio.isReady">試聴/停止</button>
+        <button *ngIf="audio !== jukebox?.audio" (click)="playBGM(audio)" [disabled]="!audio.isReady">BGM/再生</button>
+        <button *ngIf="audio === jukebox?.audio" (click)="stopBGM(audio)" [disabled]="!audio.isReady">BGM/停止</button>
+        <span *ngIf="audio === auditionPlayer?.audio && !auditionPlayer?.paused">【試聴中】</span>
+        <span *ngIf="audio === jukebox?.audio">【BGM】</span>
+        <span>{{audio.name}}</span><br>
 
-  </div>
-  <div *ngIf="audios.length < 1" >アップロードされた音楽ファイルはここに表示されます。</div>
+    </div>
+    <div *ngIf="audios.length < 1">アップロードされた音楽ファイルはここに表示されます。</div>
 </div>
 
 <label>
