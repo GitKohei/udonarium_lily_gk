@@ -51,7 +51,8 @@ https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.5.1/udonarium
 > 本家と同じなので本家の udonarium の説明を参照してください。
 > 自力コンパイルするかたへｖ1.02.0より--prodで自動生成される 3rdpartylicenses.txt にソフト内リンクが貼られるようにしてあります。
 > つけないと生成されずlicensesへのリンクが切れるのでご注意ください。
-> 
+>
+そもそも自力コンパイルにはNode.jsと@angular/cliのインストールが必要だけどそのへんはぐぐってくれnpmとngにお前も苦しめ(2敗)
 
 # changelog
 
@@ -115,7 +116,9 @@ https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.5.1/udonarium
             <br>※リアルタイムで同心円のUpdateかけらんないのこれ？重いか？重そう！
         </dd>
     <dt>Improve: カットイン/よく使う末尾のやつ</dt>
-    <dd>打撃音とか回避音とかはもう全部初期状態でカットイン作成済みに。ついでにカットイン名が重複してたら作成しないようにしといた</dd>
+        <dd>
+            打撃音とか回避音とかはもう全部初期状態でカットイン作成済みに。ついでにカットイン名が重複してたら作成しないようにしといた
+        </dd>
     <dt>Improve: インベントリ/テーブル上のキャラ探し機能</dt>
     <dd>インベクリックでハイライト出てたけどマウスオーバーでずっとハイライト出るように変更してこのキャラどこいっちゃったの現象を減少（激旨ギャグ</dd>
     <dt>Add: インベントリ/キャラの行動まち？待機状態</dt>
