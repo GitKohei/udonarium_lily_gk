@@ -35,6 +35,7 @@ https://github.com/entyu/udonarium_lily
 > 
 
 https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.5.1/udonarium_lily_gk.zip/
+:warning:↑`assets/config.yaml`が入ってなかったらどっか他の[Udonarium](https://github.com/TK11235/udonarium)から持ってきてくれ！すまんな！:warning:
 
 > 
 > #### SkyWay
