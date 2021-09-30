@@ -45,3 +45,4 @@ testem.log
 Thumbs.db
 ng-build--prod.bat
 ng-serve.bat
+src/assets/config.yaml
