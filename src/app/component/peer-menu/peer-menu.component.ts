@@ -10,6 +10,7 @@ import { LobbyComponent } from 'component/lobby/lobby.component';
 import { AppConfigService } from 'service/app-config.service';
 import { ModalService } from 'service/modal.service';
 import { PanelService } from 'service/panel.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Component({
   selector: 'peer-menu',
@@ -32,8 +33,17 @@ export class PeerMenuComponent implements OnInit, OnDestroy, AfterViewInit {
     private ngZone: NgZone,
     private modalService: ModalService,
     private panelService: PanelService,
-    public appConfigService: AppConfigService
-  ) { }
+    public appConfigService: AppConfigService,
+    private cookieService: CookieService,
+  ) {
+    if(!this.cookieService.check('Nickname'))
+      this.cookieService.set('Nickname', 'プレイヤー');
+    this.myPeer.name = this.cookieService.get('Nickname');
+  }
+
+  myPeerNameHasChanged(e) {
+    this.cookieService.set('Nickname', this.myPeer.name);
+  }
 
   ngOnInit() {
     Promise.resolve().then(() => this.panelService.title = '接続情報');
