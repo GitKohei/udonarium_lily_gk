@@ -92,6 +92,7 @@ export class TabletopActionService {
       let url: string = `./assets/images/dice/${imagePathPrefix}/${imagePathPrefix}[${face}].png`;
       image = ImageStorage.instance.get(url);
       if (!image) { image = ImageStorage.instance.add(url); }
+      ImageTag.create(image.identifier).tag = 'dices';
       diceSymbol.imageDataElement.getFirstElementByName(face).value = image.identifier;
     });
 
@@ -115,7 +116,7 @@ export class TabletopActionService {
     //    }
     if (!ImageStorage.instance.get(back)) {
       const image = ImageStorage.instance.add(back);
-      ImageTag.create(image.identifier).tag = 'トランプ';
+      ImageTag.create(image.identifier).tag = 'trumps';
     }
     //
     let suits: string[] = ['c', 'd', 'h', 's'];
@@ -136,7 +137,7 @@ export class TabletopActionService {
         //本家PR #92より
         //          ImageStorage.instance.add(url);
         const image = ImageStorage.instance.add(url);
-        ImageTag.create(image.identifier).tag = 'トランプ';
+        ImageTag.create(image.identifier).tag = 'trumps';
         //
 
       }
@@ -367,6 +368,7 @@ export class TabletopActionService {
     fileContext = ImageFile.createEmpty('testCharacter_1_image').toContext();
     fileContext.url = './assets/images/mon_052.gif';
     testFile = ImageStorage.instance.add(fileContext);
+    ImageTag.create(testFile.identifier).tag = 'default';
     testCharacter.location.x = 5 * 50;
     testCharacter.location.y = 9 * 50;
     testCharacter.initialize();
@@ -386,11 +388,13 @@ export class TabletopActionService {
     fileContext = ImageFile.createEmpty('testCharacter_3_image').toContext();
     fileContext.url = './assets/images/mon_128.gif';
     testFile = ImageStorage.instance.add(fileContext);
+    ImageTag.create(testFile.identifier).tag = 'default';
     testCharacter.location.x = 4 * 50;
     testCharacter.location.y = 2 * 50;
     testCharacter.initialize();
 
     testFile = ImageStorage.instance.add(fileContext);
+    ImageTag.create(testFile.identifier).tag = 'default';
     ImageTag.create(testFile.identifier).tag = 'モンスター'; //本家PR #92より
     testCharacter.createTestGameDataElement('モンスターC', 3, testFile.identifier);
     //-------------------------
@@ -402,8 +406,7 @@ export class TabletopActionService {
     //    fileContext.tag = 'テスト01';
 
     testFile = ImageStorage.instance.add(fileContext);
-
-    ImageTag.create(testFile.identifier).tag = '';//本家PR #92より
+    ImageTag.create(testFile.identifier).tag = 'default';
     testCharacter.location.x = 6 * 50;
     testCharacter.location.y = 11 * 50;
     testCharacter.initialize();
@@ -414,6 +417,7 @@ export class TabletopActionService {
     fileContext = ImageFile.createEmpty('testCharacter_5_image').toContext();
     fileContext.url = './assets/images/mon_211.gif';
     testFile = ImageStorage.instance.add(fileContext);
+    ImageTag.create(testFile.identifier).tag = 'default';
     testCharacter.location.x = 12 * 50;
     testCharacter.location.y = 12 * 50;
     testCharacter.initialize();
@@ -426,8 +430,7 @@ export class TabletopActionService {
     fileContext = ImageFile.createEmpty('testCharacter_6_image').toContext();
     fileContext.url = './assets/images/mon_135.gif';
     testFile = ImageStorage.instance.add(fileContext);
-
-    ImageTag.create(testFile.identifier).tag = '';//本家PR #92より
+    ImageTag.create(testFile.identifier).tag = 'default';
 
     testCharacter.initialize();
     testCharacter.location.x = 5 * 50;

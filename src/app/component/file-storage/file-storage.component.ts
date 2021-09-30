@@ -103,6 +103,8 @@ export class FileStorageComponent implements OnInit, OnDestroy, AfterViewInit {
    
     if( this.newTagName == '全て' ) return; //表示上混乱するタグの禁止
     if( this.newTagName == 'システム予約' )return; //システム予約名称
+    if( this.newTagName == 'dices' )return;
+    if( this.newTagName == 'trumps' )return;
     
     let changeableImages = this.images; 
     console.log("this.newTagName" + this.newTagName );
