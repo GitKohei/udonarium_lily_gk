@@ -22,7 +22,7 @@ export class AudioPlayer {
     return AudioPlayer._audioContext;
   }
 
-  private static _volume: number = 0.5;
+  private static _volume: number = 0.1;
   static get volume(): number { return AudioPlayer._volume; }
   static set volume(volume: number) {
     AudioPlayer._volume = volume;
