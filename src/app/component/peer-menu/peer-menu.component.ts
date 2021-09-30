@@ -36,13 +36,17 @@ export class PeerMenuComponent implements OnInit, OnDestroy, AfterViewInit {
     public appConfigService: AppConfigService,
     private cookieService: CookieService,
   ) {
+    let date = new Date();
+    date.setMonth( date.getMonth()+1 );
     if(!this.cookieService.check('Nickname'))
-      this.cookieService.set('Nickname', 'プレイヤー');
+      this.cookieService.set('Nickname', 'プレイヤー', date);
     this.myPeer.name = this.cookieService.get('Nickname');
   }
 
   myPeerNameHasChanged(e) {
-    this.cookieService.set('Nickname', this.myPeer.name);
+    let date = new Date();
+    date.setMonth( date.getMonth()+1 );
+    this.cookieService.set('Nickname', this.myPeer.name, date);
   }
 
   ngOnInit() {
