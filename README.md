@@ -34,7 +34,7 @@ https://github.com/entyu/udonarium_lily
 > 以下のファイルをダウンロードして解凍し、Webサーバに配置してください。  
 > 
 
-https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.5.1/udonarium_lily_gk.zip/
+https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.7.21/udonarium_lily_gk.zip/
 <br>:warning:↑`assets/config.yaml`が入ってなかったらどっか他の[Udonarium](https://github.com/TK11235/udonarium)から持ってきてくれ！すまんな！:warning:
 
 > 
