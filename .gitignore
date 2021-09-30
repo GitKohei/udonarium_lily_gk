@@ -44,8 +44,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
-/src/assets/config.yaml
-/src/assets/config.yaml
-/src/assets/config.yaml
 ng-build--prod.bat
 ng-serve.bat
