@@ -441,7 +441,7 @@ export class TabletopActionService {
     // ここでデフォルトカットインに使うSEをロード
     let ses: string[][] = [
       ['NextR', './assets/sounds/se/next.ogg'],
-      ['MPreOpe', './assets/sounds/se/skill.ogg'],
+      ['MPreOpe', '/assets/sounds/se/skill.ogg'],
       ['MAttack', './assets/sounds/se/attackmagic.ogg'],
       ['MBuff', './assets/sounds/se/buff.ogg'],
       ['MDebuff', './assets/sounds/se/debuff.ogg'],
@@ -474,7 +474,7 @@ export class TabletopActionService {
         cutIn.y_pos = 0;
 
         let id = AudioStorage.instance.add(node[1]).identifier;
-        AudioStorage.instance.get(id).isHidden = true;
+        AudioStorage.instance.get(id).isHidden = false;
 
         cutIn.audioIdentifier = id;
         cutIn.audioName = node[0];

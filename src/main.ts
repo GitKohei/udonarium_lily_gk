@@ -8,6 +8,9 @@ import { environment } from './environments/environment';
 
 if (environment.production) {
   enableProdMode();
+  if(window) {
+    window.console.log = () => {}; // console.log()を空関数へオーバーライド
+  }
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
