@@ -2,6 +2,7 @@ import { animate, keyframes, style, transition, trigger } from '@angular/animati
 import { Component, ElementRef, Input, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { PanelService } from 'service/panel.service';
 import { PointerDeviceService } from 'service/pointer-device.service';
+import { CookieService } from 'ngx-cookie-service';
 //
 import { EventSystem, Network } from '@udonarium/core/system';
 import { ChatTachieImageComponent } from 'component/chat-tachie-img/chat-tachie-img.component';
@@ -58,8 +59,10 @@ export class UIPanelComponent implements OnInit {
 
   constructor(
     public panelService: PanelService,
-    private pointerDeviceService: PointerDeviceService
-  ) { }
+    private pointerDeviceService: PointerDeviceService,
+    private cookieService: CookieService,
+    private elementRef: ElementRef,
+    ) { }
   
   
   private tachieDispByMouse: boolean = true;
@@ -104,7 +107,22 @@ export class UIPanelComponent implements OnInit {
       panel.style.height = this.height + 'px';
 
   }
-*/  
+*/
+  panelStyleToCookieString(css: CSSStyleDeclaration): string {
+    return ''+
+    ((css.left)?('$left$'+css.left.replace('px','')):'')+
+    ((css.top)?('$top$'+css.top.replace('px','')):'')+
+    ((css.width)?('$width$'+css.width.replace('px','')):'')+
+    ((css.height)?('$height$'+css.height.replace('px','')):'');
+  }
+
+  ngOnDestroy() {
+    let panel = this.draggablePanel.nativeElement;
+    let date = new Date();
+    date.setMonth( date.getMonth()+1 );
+    this.cookieService.set('AppComponent_'+this.panelService.componentTyep, this.panelStyleToCookieString(panel.style), date);
+  }
+
   toggleMinimize() {
     if (this.isFullScreen) return;
 

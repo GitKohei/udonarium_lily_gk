@@ -76,6 +76,7 @@ import { ModalService } from 'service/modal.service';
 import { PanelService } from 'service/panel.service';
 import { PointerDeviceService } from 'service/pointer-device.service';
 import { TabletopService } from 'service/tabletop.service';
+import { CookieService } from 'ngx-cookie-service';
 
 import { AppComponent } from './app.component';
 
@@ -165,6 +166,7 @@ import { AppComponent } from './app.component';
     PanelService,
     PointerDeviceService,
     TabletopService,
+    CookieService,
   ],
   bootstrap: [AppComponent]
 })

@@ -79,6 +79,20 @@ upd: クソデカデフォルト音量くんを少なめに
 upd: テーブル設定も伸び悩んでたから伸ばそうと思ったのに左右にしか伸びませんでした（半ギレ その内fixしろ
 fix: テーブル設定の伸び悩んでた上下を伸びるようにfix.クッソ単純な一行だったので変更点見とけよ見とけよ～
 
+ 1.04.0.gk0.7.0
+add: 前準備としてnpm install ngx-cookie-service --saveしちゃうぜ怖いぜangular/cli12.2.7だぜ
+ - 相変わらずめっちゃWARN出る怖
+upd: 手始めに接続情報のニックネームをcookie化
+ - ゲロほど正常に動いたのでこのまま様々な場所をcookie化しちゃうぜ
+ 1.04.0.gk0.7.1
+fix: cookieの有効期限がデフォルトでブラウザ閉じるまでとかいう短命だったのでexpireの引数を追加
+ - これexpireしたいとこで毎回let date = nwe Date()すんの？スマートじゃないねぇ…
+ 1.04.0.gk0.7.2
+upd: チャットウィンドウ関連、位置などをcookie化
+ 1.04.0.gk0.7.21
+upd: おんなじ要領で全部いけそうなのでウィンドウは全部cookie化
+ - してて思ったけどカットインリストがジュークボックスから出てくるのってやっぱ変よな その内fixか
+
     -->
     <base href="./">
     <meta name="viewport" content="width=device-width, initial-scale=1">

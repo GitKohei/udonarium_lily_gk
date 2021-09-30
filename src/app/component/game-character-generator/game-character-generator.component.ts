@@ -33,7 +33,9 @@ export class GameCharacterGeneratorComponent implements OnInit, OnDestroy, After
     private viewContainerRef: ViewContainerRef,
     private modalService: ModalService,
     private panelService: PanelService
-  ) { }
+  ) {
+    panelService.componentTyep = 'GameCharacterGeneratorComponent';
+  }
 
   ngOnInit() {
     Promise.resolve().then(() => this.panelService.title = 'キャラクタージェネレーター');
