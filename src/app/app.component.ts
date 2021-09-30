@@ -42,9 +42,10 @@ import { AppConfig, AppConfigService } from 'service/app-config.service';
 import { ChatMessageService } from 'service/chat-message.service';
 import { ContextMenuService } from 'service/context-menu.service';
 import { ModalService } from 'service/modal.service';
-import { PanelOption, PanelService } from 'service/panel.service';
+import { PanelOption, PanelService, parseCookieStringToPanelOption } from 'service/panel.service';
 import { PointerDeviceService } from 'service/pointer-device.service';
 import { SaveDataService } from 'service/save-data.service';
+import { CookieService } from 'ngx-cookie-service';
 
 import { CutInWindowComponent } from 'component/cut-in-window/cut-in-window.component';
 import { DiceTableSettingComponent } from 'component/dice-table-setting/dice-table-setting.component';
@@ -75,7 +76,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private appConfigService: AppConfigService,
     private saveDataService: SaveDataService,
     private ngSelectConfig: NgSelectConfig,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private cookieService: CookieService,
   ) {
 
     this.ngZone.runOutsideAngular(() => {
@@ -90,7 +92,13 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       ObjectSerializer.instance;
       ObjectStore.instance;
       ObjectSynchronizer.instance.initialize();
-    });
+
+      let date = new Date();
+      date.setMonth( date.getMonth()+1 );
+      if(!this.cookieService.check('AppComponent_ChatWindowComponent'))
+        this.cookieService.set('AppComponent_ChatWindowComponent', 'width$700$height$400$left$100$top$450', date);
+      });
+
     this.appConfigService.initialize();
     this.pointerDeviceService.initialize();
     this.ngSelectConfig.appendTo = 'body';
@@ -212,8 +220,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     PanelService.defaultParentViewContainerRef = ModalService.defaultParentViewContainerRef = ContextMenuService.defaultParentViewContainerRef = this.modalLayerViewContainerRef;
     setTimeout(() => {
+      // need fix : ここでcookie通りのpanelを揃える必要がある not implemented. GitKohei
       this.panelService.open(PeerMenuComponent, { width: 500, height: 450, left: 100 });
-      this.panelService.open(ChatWindowComponent, { width: 700, height: 400, left: 100, top: 450 });
+      this.panelService.open(ChatWindowComponent, parseCookieStringToPanelOption(this.cookieService.get('AppComponent_ChatWindowComponent'))); // こんな感じに。初期cookieはここのコンストラクタへ
     }, 0);
     setInterval(() => {
       this.dispcounter = this.dispcounter + 1;
@@ -292,7 +301,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         break;
       case 'ChatWindowComponent':
         component = ChatWindowComponent;
-        option.width = 700;
+        option = parseCookieStringToPanelOption(this.cookieService.get('AppComponent_ChatWindowComponent'));
         break;
       case 'GameTableSettingComponent':
         component = GameTableSettingComponent;
@@ -316,8 +325,8 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         break;
     }
     if (component) {
-      option.top = (this.openPanelCount % 10 + 1) * 20;
-      option.left = 100 + (this.openPanelCount % 20 + 1) * 5;
+      if(option.top==null) option.top = (this.openPanelCount % 10 + 1) * 20;
+      if(option.left==null) option.left = 100 + (this.openPanelCount % 20 + 1) * 5;
       this.openPanelCount = this.openPanelCount + 1;
       this.panelService.open(component, option);
     }

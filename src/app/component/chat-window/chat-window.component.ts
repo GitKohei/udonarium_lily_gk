@@ -73,7 +73,9 @@ export class ChatWindowComponent implements OnInit, OnDestroy, AfterViewInit {
     public chatMessageService: ChatMessageService,
     private panelService: PanelService,
     private pointerDeviceService: PointerDeviceService
-  ) { }
+  ) {
+    panelService.componentTyep = 'ChatWindowComponent';
+  }
 
   ngOnInit() {
     this.sendFrom = PeerCursor.myCursor.identifier;
