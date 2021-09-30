@@ -474,7 +474,7 @@ export class TabletopActionService {
         cutIn.y_pos = 0;
 
         let id = AudioStorage.instance.add(node[1]).identifier;
-        AudioStorage.instance.get(id).isHidden = false;
+        AudioStorage.instance.get(id).isHidden = true;
 
         cutIn.audioIdentifier = id;
         cutIn.audioName = node[0];
