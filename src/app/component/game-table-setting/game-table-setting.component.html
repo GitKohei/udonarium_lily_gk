@@ -1,13 +1,13 @@
 <div class="flex-container">
-    <div class="flex-item no-grow">
-        <div>
+    <div class="flex-item" style="flex-grow: 1; display: flex; flex-flow: column;">
+        <div style="flex-grow: 0;">
             <button (click)="createGameTable()">新しいテーブルを作る</button>
         </div>
-        <select style="width: 10em;" size="10" (change)="selectGameTable($event.target.value)" [ngModel]="selectedTable?.identifier">
+        <select style="overflow-y:auto; flex-grow: 1;" size="10" (change)="selectGameTable($event.target.value)" [ngModel]="selectedTable?.identifier">
       <option *ngFor="let gameTable of getGameTables()" value="{{gameTable.identifier}}">{{gameTable.name}}</option>
     </select>
     </div>
-    <div class="flex-item">
+    <div class="flex-item no-grow">
         <ng-container *ngIf="!isEmpty || selectedTable">
             <div class="images-select">
                 <div>
