@@ -53,7 +53,9 @@ export class GameObjectInventoryComponent implements OnInit, AfterViewInit, OnDe
     private inventoryService: GameObjectInventoryService,
     private contextMenuService: ContextMenuService,
     private pointerDeviceService: PointerDeviceService
-  ) { }
+  ) {
+    panelService.componentTyep = 'GameObjectInventoryComponent';
+  }
 
   ngOnInit() {
     Promise.resolve().then(() => this.panelService.title = 'インベントリ');

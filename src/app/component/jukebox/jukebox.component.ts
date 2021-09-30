@@ -42,7 +42,9 @@ export class JukeboxComponent implements OnInit, OnDestroy {
     private panelService: PanelService,
     private pointerDeviceService: PointerDeviceService,
     private ngZone: NgZone
-  ) { }
+  ) {
+    panelService.componentTyep = 'JukeboxComponent';
+  }
 
   ngOnInit() {
     Promise.resolve().then(() => this.modalService.title = this.panelService.title = 'ジュークボックス');

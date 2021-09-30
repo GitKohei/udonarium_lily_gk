@@ -36,6 +36,8 @@ export class PeerMenuComponent implements OnInit, OnDestroy, AfterViewInit {
     public appConfigService: AppConfigService,
     private cookieService: CookieService,
   ) {
+    panelService.componentTyep = 'PeerMenuComponent';
+
     let date = new Date();
     date.setMonth( date.getMonth()+1 );
     if(!this.cookieService.check('Nickname'))

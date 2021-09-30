@@ -91,7 +91,9 @@ export class GameTableSettingComponent implements OnInit, OnDestroy, AfterViewIn
     private modalService: ModalService,
     private saveDataService: SaveDataService,
     private panelService: PanelService
-  ) { }
+  ) {
+    panelService.componentTyep = 'GameTableSettingComponent';
+  }
 
   ngOnInit() {
     Promise.resolve().then(() => this.modalService.title = this.panelService.title = 'テーブル設定');

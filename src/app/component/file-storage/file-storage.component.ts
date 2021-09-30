@@ -139,6 +139,7 @@ export class FileStorageComponent implements OnInit, OnDestroy, AfterViewInit {
     private changeDetector: ChangeDetectorRef,
     private panelService: PanelService
   ) { 
+    panelService.componentTyep = 'FileStorageComponent';
     this.initTimestamp = Date.now();
   }
 

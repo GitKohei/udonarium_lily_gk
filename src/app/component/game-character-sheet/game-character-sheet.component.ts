@@ -31,7 +31,9 @@ export class GameCharacterSheetComponent implements OnInit, OnDestroy, AfterView
     private saveDataService: SaveDataService,
     private panelService: PanelService,
     private modalService: ModalService
-  ) { }
+  ) {
+    panelService.componentTyep = 'GameCharacterSheetComponent';
+  }
 
   ngOnInit() {
     EventSystem.register(this)

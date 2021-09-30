@@ -95,9 +95,16 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
       let date = new Date();
       date.setMonth( date.getMonth()+1 );
-      if(!this.cookieService.check('AppComponent_ChatWindowComponent'))
+      if(!this.cookieService.check('AppComponent_ChatWindowComponent')) {
         this.cookieService.set('AppComponent_ChatWindowComponent', 'width$700$height$400$left$100$top$450', date);
-      });
+      }
+      if(!this.cookieService.check('AppComponent_GameTableSettingComponent')) {
+        this.cookieService.set('AppComponent_GameTableSettingComponent', 'width$630$height$400$left$100$top$450', date);
+      }
+      if(!this.cookieService.check('AppComponent_GameCharacterGeneratorComponent')) {
+        this.cookieService.set('AppComponent_GameCharacterGeneratorComponent', 'width$500$height$300$left$100$top$450', date);
+      }
+    });
 
     this.appConfigService.initialize();
     this.pointerDeviceService.initialize();
@@ -294,18 +301,16 @@ export class AppComponent implements AfterViewInit, OnDestroy {
 
   open(componentName: string) {
     let component: new(...args: any[]) => any = null;
-    let option: PanelOption = { width: 450, height: 600, left: 100 };
+    let option: PanelOption;// = { width: 450, height: 600, left: 100 };
     switch (componentName) {
       case 'PeerMenuComponent':
         component = PeerMenuComponent;
         break;
       case 'ChatWindowComponent':
         component = ChatWindowComponent;
-        option = parseCookieStringToPanelOption(this.cookieService.get('AppComponent_ChatWindowComponent'));
         break;
       case 'GameTableSettingComponent':
         component = GameTableSettingComponent;
-        option = { width: 630, height: 400, left: 100 };
         break;
       case 'FileStorageComponent':
         component = FileStorageComponent;
@@ -324,7 +329,9 @@ export class AppComponent implements AfterViewInit, OnDestroy {
         component = GameObjectInventoryComponent;
         break;
     }
+    option = parseCookieStringToPanelOption(this.cookieService.get('AppComponent_'+componentName));
     if (component) {
+      if(option==null) option = { width: 450, height: 600, left: 100 };
       if(option.top==null) option.top = (this.openPanelCount % 10 + 1) * 20;
       if(option.left==null) option.left = 100 + (this.openPanelCount % 20 + 1) * 5;
       this.openPanelCount = this.openPanelCount + 1;
