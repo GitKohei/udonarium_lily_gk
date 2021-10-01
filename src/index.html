@@ -9,7 +9,7 @@
         }
     </script>
 
-    <title>UdonariumLilyGK 1.04.0.gk0.6.1</title>
+    <title>UdonariumLilyGK</title>
     <!--
 
  1.04.0.gk0.1.0
@@ -92,6 +92,11 @@ upd: チャットウィンドウ関連、位置などをcookie化
  1.04.0.gk0.7.21
 upd: おんなじ要領で全部いけそうなのでウィンドウは全部cookie化
  - してて思ったけどカットインリストがジュークボックスから出てくるのってやっぱ変よな その内fixか
+ 1.04.0.gk0.7.22
+upd: date.set(date.month+1)みたいな事全部の箇所でやるのはアホなのでまとめた
+ - まとめたのはいいけどその場所がPanelServiceってのはなんか違うよなぁ？うーんこの
+mov: ↑のやつをPanelServiceからdefine.tsへ移動
+ - static関数が残っちまったなぁオイ 誰かangular/cli-typescript自信ニキがいたらいい案くれ
 
     -->
     <base href="./">

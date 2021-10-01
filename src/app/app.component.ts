@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, NgZone, OnDestroy, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnDestroy, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { NgSelectConfig } from '@ng-select/ng-select';
 
 import { ChatTabList } from '@udonarium/chat-tab-list';
@@ -25,6 +25,7 @@ import { GameCharacter } from '@udonarium/game-character';
 import { CutIn } from '@udonarium/cut-in';
 import { CutInLauncher } from '@udonarium/cut-in-launcher';
 import { Vote, VoteContext } from '@udonarium/vote';
+import { Define } from '@udonarium/define';
 
 import { ChatWindowComponent } from 'component/chat-window/chat-window.component';
 import { ContextMenuComponent } from 'component/context-menu/context-menu.component';
@@ -50,6 +51,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { CutInWindowComponent } from 'component/cut-in-window/cut-in-window.component';
 import { DiceTableSettingComponent } from 'component/dice-table-setting/dice-table-setting.component';
 import { VoteWindowComponent } from 'component/vote-window/vote-window.component';
+import { Title } from '@angular/platform-browser';
 
 
 @Component({
@@ -57,7 +59,7 @@ import { VoteWindowComponent } from 'component/vote-window/vote-window.component
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements AfterViewInit, OnDestroy {
+export class AppComponent implements AfterViewInit, OnDestroy, OnInit {
 
   @ViewChild('modalLayer', { read: ViewContainerRef, static: true }) modalLayerViewContainerRef: ViewContainerRef;
   private immediateUpdateTimer: NodeJS.Timer = null;
@@ -78,6 +80,7 @@ export class AppComponent implements AfterViewInit, OnDestroy {
     private ngSelectConfig: NgSelectConfig,
     private ngZone: NgZone,
     private cookieService: CookieService,
+    private title: Title,
   ) {
 
     this.ngZone.runOutsideAngular(() => {
@@ -93,16 +96,14 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       ObjectStore.instance;
       ObjectSynchronizer.instance.initialize();
 
-      let date = new Date();
-      date.setMonth( date.getMonth()+1 );
       if(!this.cookieService.check('AppComponent_ChatWindowComponent')) {
-        this.cookieService.set('AppComponent_ChatWindowComponent', 'width$700$height$400$left$100$top$450', date);
+        this.cookieService.set('AppComponent_ChatWindowComponent', 'width$700$height$400$left$100$top$450', Define.EXPIRE());
       }
       if(!this.cookieService.check('AppComponent_GameTableSettingComponent')) {
-        this.cookieService.set('AppComponent_GameTableSettingComponent', 'width$630$height$400$left$100$top$450', date);
+        this.cookieService.set('AppComponent_GameTableSettingComponent', 'width$630$height$400$left$100$top$450', Define.EXPIRE());
       }
       if(!this.cookieService.check('AppComponent_GameCharacterGeneratorComponent')) {
-        this.cookieService.set('AppComponent_GameCharacterGeneratorComponent', 'width$500$height$300$left$100$top$450', date);
+        this.cookieService.set('AppComponent_GameCharacterGeneratorComponent', 'width$500$height$300$left$100$top$450', Define.EXPIRE());
       }
     });
 
@@ -222,6 +223,10 @@ export class AppComponent implements AfterViewInit, OnDestroy {
       .on('DISCONNECT_PEER', event => {
         this.lazyNgZoneUpdate(event.isSendFromSelf);
       });
+  }
+
+  ngOnInit() {
+    this.title.setTitle('Udonarium Lily GK '+Define.UDONARIUM_LILY_GK_VERSION);
   }
 
   ngAfterViewInit() {
