@@ -7,6 +7,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { EventSystem, Network } from '@udonarium/core/system';
 import { ChatTachieImageComponent } from 'component/chat-tachie-img/chat-tachie-img.component';
 //
+import { Define } from '@udonarium/define';
 
 @Component({
   selector: 'ui-panel',
@@ -118,9 +119,7 @@ export class UIPanelComponent implements OnInit {
 
   ngOnDestroy() {
     let panel = this.draggablePanel.nativeElement;
-    let date = new Date();
-    date.setMonth( date.getMonth()+1 );
-    this.cookieService.set('AppComponent_'+this.panelService.componentTyep, this.panelStyleToCookieString(panel.style), date);
+    this.cookieService.set('AppComponent_'+this.panelService.componentTyep, this.panelStyleToCookieString(panel.style), Define.EXPIRE());
   }
 
   toggleMinimize() {

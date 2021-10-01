@@ -4,6 +4,7 @@ import { ObjectStore } from '@udonarium/core/synchronize-object/object-store';
 import { PeerContext } from '@udonarium/core/system/network/peer-context';
 import { EventSystem, Network } from '@udonarium/core/system';
 import { PeerCursor } from '@udonarium/peer-cursor';
+import { Define } from '@udonarium/define';
 
 import { FileSelecterComponent } from 'component/file-selecter/file-selecter.component';
 import { LobbyComponent } from 'component/lobby/lobby.component';
@@ -38,17 +39,13 @@ export class PeerMenuComponent implements OnInit, OnDestroy, AfterViewInit {
   ) {
     panelService.componentTyep = 'PeerMenuComponent';
 
-    let date = new Date();
-    date.setMonth( date.getMonth()+1 );
     if(!this.cookieService.check('Nickname'))
-      this.cookieService.set('Nickname', 'プレイヤー', date);
+      this.cookieService.set('Nickname', 'プレイヤー', Define.EXPIRE());
     this.myPeer.name = this.cookieService.get('Nickname');
   }
 
   myPeerNameHasChanged(e) {
-    let date = new Date();
-    date.setMonth( date.getMonth()+1 );
-    this.cookieService.set('Nickname', this.myPeer.name, date);
+    this.cookieService.set('Nickname', this.myPeer.name, Define.EXPIRE());
   }
 
   ngOnInit() {

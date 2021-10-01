@@ -13,6 +13,8 @@ import { ModalService } from 'service/modal.service';
 import { CutInListComponent } from 'component/cut-in-list/cut-in-list.component';
 import { PointerDeviceService } from 'service/pointer-device.service';
 import { PanelOption, PanelService } from 'service/panel.service';
+import { CookieService } from 'ngx-cookie-service';
+import { Define } from '@udonarium/define';
 
 import { CutInLauncher } from '@udonarium/cut-in-launcher';
 
@@ -41,7 +43,8 @@ export class JukeboxComponent implements OnInit, OnDestroy {
     private modalService: ModalService,
     private panelService: PanelService,
     private pointerDeviceService: PointerDeviceService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private cookieService: CookieService,
   ) {
     panelService.componentTyep = 'JukeboxComponent';
   }
@@ -53,9 +56,21 @@ export class JukeboxComponent implements OnInit, OnDestroy {
       .on('*', event => {
         if (event.eventName.startsWith('FILE_')) this.lazyNgZoneUpdate();
       });
+
+    if (!this.cookieService.check(this.panelService.componentTyep + '_Volum')) {
+      this.cookieService.set(this.panelService.componentTyep + '_Volum', '0.1', Define.EXPIRE());
+    }
+    this.volume =+ this.cookieService.get(this.panelService.componentTyep + '_Volum');
+    if (!this.cookieService.check(this.panelService.componentTyep + '_AuditionVolum')) {
+      this.cookieService.set(this.panelService.componentTyep + '_AuditionVolum', '0.5', Define.EXPIRE());
+    }
+    this.auditionVolume = +this.cookieService.get(this.panelService.componentTyep + '_AuditionVolum');
   }
 
   ngOnDestroy() {
+    this.cookieService.set(this.panelService.componentTyep + '_Volum', this.volume.toString(), Define.EXPIRE());
+    this.cookieService.set(this.panelService.componentTyep + '_AuditionVolum', this.auditionVolume.toString(), Define.EXPIRE());
+
     EventSystem.unregister(this);
     this.stop();
   }
@@ -69,13 +84,13 @@ export class JukeboxComponent implements OnInit, OnDestroy {
   }
 
   playBGM(audio: AudioFile) { //memoこっちが全体
-    
+
     //タグなしのBGM付きカットインはジュークボックスと同時に鳴らさないようにする
     //BGM駆動のためのインスタンスを別にしているため現状この処理で止める
     this.cutInLauncher.stopBlankTagCutIn();
-    
+
     this.jukebox.play(audio.identifier, true);
-    
+
   }
 
   stopBGM(audio: AudioFile) {
@@ -99,7 +114,7 @@ export class JukeboxComponent implements OnInit, OnDestroy {
 
   openCutInList() {
     let coordinate = this.pointerDeviceService.pointers[0];
-    let option: PanelOption = { left: coordinate.x+25, top: coordinate.y+25, width: 650, height: 700 };
+    let option: PanelOption = { left: coordinate.x + 25, top: coordinate.y + 25, width: 650, height: 700 };
     this.panelService.open<CutInListComponent>(CutInListComponent, option);
   }
 
