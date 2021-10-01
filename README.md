@@ -1,3 +1,7 @@
+# sample
+
+[お試しページ](https://gitkohei.github.io/)
+
 # introduction
 
 ユドナリウムリリィをローカル環境でゴリゴリにソード・ワールド2.5『だけ』で遊び倒すカスタムのプロジェクト。
@@ -9,7 +13,7 @@
 そのさらに分家のユドナリウムリリィGKの追加範囲は(GitKohei)とそのソースの作者に著作権が有って、
 同じようにMITライセンスを引き継ぎます。
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/TK11235/udonarium/blob/master/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/GitKohei/udonarium_lily_gk/blob/master/LICENSE)
 
 :warning:
 参加者の要求PCスペックが無駄に跳ね上がる演出をいれてたり
@@ -19,8 +23,6 @@
 :warning:
 
 # installation
-
-![lilygk_sample](https://user-images.githubusercontent.com/サンプルイメージもまだないよ/)
 
 分家から引用
 https://github.com/entyu/udonarium_lily
@@ -34,6 +36,7 @@ https://github.com/entyu/udonarium_lily
 > 以下のファイルをダウンロードして解凍し、Webサーバに配置してください。  
 > 
 
+↓こいつをダウンロード
 https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.7.21/udonarium_lily_gk.zip/
 <br>:warning:↑`assets/config.yaml`が入ってなかったらどっか他の[Udonarium](https://github.com/TK11235/udonarium)から持ってきてくれ！すまんな！:warning:
 
@@ -53,7 +56,7 @@ https://github.com/GitKohei/udonarium_lily_gk/releases/download/v0.7.21/udonariu
 > 自力コンパイルするかたへｖ1.02.0より--prodで自動生成される 3rdpartylicenses.txt にソフト内リンクが貼られるようにしてあります。
 > つけないと生成されずlicensesへのリンクが切れるのでご注意ください。
 >
-そもそも自力コンパイルにはNode.jsと@angular/cliのインストールが必要だけどそのへんはぐぐってくれnpmとngにお前も苦しめ(2敗)
+そもそも自力コンパイルにはNode.jsと@angular/cliのインストールが必要だけどそのへんはぐぐってくれnpmとngにお前も苦しめ私はなんとかなりました(2敗)
 
 # changelog
 
