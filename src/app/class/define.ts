@@ -8,5 +8,5 @@ export class Define {
         date.setMonth(date.getMonth() + this.COOKIE_EXPIRES_MONTH);
         return date;
     }
-    static readonly UDONARIUM_LILY_GK_VERSION: string = '1.04.0.gk0.7.22';
+    static readonly UDONARIUM_LILY_GK_VERSION: string = '1.04.0.gk0.7.3';
 }
